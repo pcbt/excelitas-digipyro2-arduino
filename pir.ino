@@ -1,3 +1,14 @@
+//#include <MemoryFree.h>;
+//#include <pgmStrToRAM.h>; // not needed for new way. but good to have for reference.
+
+//serial pin Uno 2, atmega2560 board 12
+//dl pin Uno 13, atmega2560 board 53
+
+#define SERIAL 12
+#define DL 53
+#define LED 25
+
+
 void writeregval(int pin1,unsigned long regval){
   int i;
   int _pin1=pin1;
@@ -26,10 +37,10 @@ void writeregval(int pin1,unsigned long regval){
 }
 
 void setup() {
-  Serial.begin(9600);
-   pinMode(2,OUTPUT);
-   pinMode(13,INPUT);
-   pinMode(12,OUTPUT);
+  Serial.begin(115200);
+   pinMode(SERIAL,OUTPUT);
+   pinMode(DL,INPUT);
+   pinMode(LED,OUTPUT);
 }
 
 // the loop function runs over and over again forever
@@ -38,20 +49,24 @@ void loop() {
    if(i){
            Serial.println("Writing to register");
            _delay_ms(1000);
-           writeregval(2,0x00304D10);
+           writeregval(SERIAL,0x00304D10);
            i=0;
         }
         while(1){
-          int movement = digitalRead(13);
+          int movement = digitalRead(DL);
           if(movement){
             Serial.println(movement);
             Serial.println("movement");
-            pinMode(13,OUTPUT);
-            digitalWrite(13,LOW);
-            digitalWrite(12,HIGH);
+            //Serial.println(getPSTR("Old way to force String to Flash"));
+            //Serial.println(F("New way to force String to Flash"));
+            //Serial.println(F("Free RAM = "));
+            //Serial.println(freeMemory(), DEC);  // print how much RAM is available.
+            pinMode(DL,OUTPUT);
+            digitalWrite(DL,LOW);
+            digitalWrite(LED,HIGH);
             _delay_ms(2000);
-            pinMode(13,INPUT);
-            digitalWrite(12,LOW);
+            pinMode(DL,INPUT);
+            digitalWrite(LED,LOW);
             
             
             }
